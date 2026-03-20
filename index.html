@@ -79,9 +79,6 @@
     .hero-inner{display:grid;grid-template-columns:1fr 380px;gap:80px;align-items:center;position:relative;z-index:2;}
     .hero-title em{font-style:italic;color:var(--wine);}
     .hero-desc{margin-top:28px;max-width:600px;}
-    .hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;}
-    .pill{display:inline-flex;padding:8px 14px;border-radius:999px;border:1px solid var(--border2);font-size:12px;font-weight:600;color:var(--ink3);transition:all .2s ease;background:var(--paper);}
-    .pill:hover{border-color:var(--wine);color:var(--wine);background:var(--wine-bg);}
 
     .hero-aside{display:flex;flex-direction:column;gap:14px;}
     .hero-block{padding:24px;border-radius:20px;background:var(--paper);border:1px solid var(--border);}
@@ -324,7 +321,6 @@
       .hero{min-height:auto;padding-top:36px;}
       .hero-inner{gap:32px;}
       .hero-desc{margin-top:20px;}
-      .hero-pills{margin-top:24px;}
       .ctx-main,.card,.svc,.season-card,.footer-main,.footer-cta,.price-block{padding:24px;}
       .mock-body{padding:16px;}
       .m-cols{grid-template-columns:1fr;}
@@ -568,13 +564,7 @@
         <div class="tag">Gestão inteligente da categoria vinho</div>
         <h1 style="margin-top:16px;">A categoria vinho merece <em>arquitetura</em>, não improviso.</h1>
         <p class="hero-desc lead">A Parcelle integra inteligência comercial, curadoria especializada e tecnologia aplicada para transformar portfólio, carta, compra e reposição em um sistema coerente de decisão — para restaurantes, adegas, mercados, distribuidores e importadoras.</p>
-        <div class="hero-pills">
-          <span class="pill">Reestruturação de mix</span><span class="pill">Curadoria de carta</span>
-          <span class="pill">Compra por fornecedor</span><span class="pill">Menu engineering</span>
-          <span class="pill">Treinamento de equipe</span><span class="pill">Automação de pedidos</span>
-          <span class="pill">Eventos e harmonizações</span>
-        </div>
-      </div>
+</div>
       <div class="hero-aside rv rv-d2">
         <div class="hero-block"><div class="hb-label">Problema</div><div class="hb-val">Dados e repertório existem, mas a gestão do portfólio ainda depende de decisão manual, sem estrutura analítica nem integração entre negócio e curadoria.</div></div>
         <div class="hero-block"><div class="hb-label">Objetivo</div><div class="hb-val">Criar base técnica para decidir o que manter, corrigir, expandir, substituir — com critérios claros e capacidade real de implantação.</div></div>
@@ -592,20 +582,12 @@
   <div class="marquee-track">
     <span class="marquee-item">Arquitetura de portfólio<span class="sep">·</span></span>
     <span class="marquee-item">Curadoria especializada<span class="sep">·</span></span>
-    <span class="marquee-item">Menu engineering<span class="sep">·</span></span>
-    <span class="marquee-item">Inteligência de compra<span class="sep">·</span></span>
-    <span class="marquee-item">Treinamento de equipe<span class="sep">·</span></span>
-    <span class="marquee-item">Automação de pedidos<span class="sep">·</span></span>
-    <span class="marquee-item">Eventos e harmonizações<span class="sep">·</span></span>
-    <span class="marquee-item">Marca própria<span class="sep">·</span></span>
+    <span class="marquee-item">Inteligência comercial<span class="sep">·</span></span>
+    <span class="marquee-item">Tecnologia aplicada<span class="sep">·</span></span>
     <span class="marquee-item">Arquitetura de portfólio<span class="sep">·</span></span>
     <span class="marquee-item">Curadoria especializada<span class="sep">·</span></span>
-    <span class="marquee-item">Menu engineering<span class="sep">·</span></span>
-    <span class="marquee-item">Inteligência de compra<span class="sep">·</span></span>
-    <span class="marquee-item">Treinamento de equipe<span class="sep">·</span></span>
-    <span class="marquee-item">Automação de pedidos<span class="sep">·</span></span>
-    <span class="marquee-item">Eventos e harmonizações<span class="sep">·</span></span>
-    <span class="marquee-item">Marca própria<span class="sep">·</span></span>
+    <span class="marquee-item">Inteligência comercial<span class="sep">·</span></span>
+    <span class="marquee-item">Tecnologia aplicada<span class="sep">·</span></span>
   </div>
 </div>
 
@@ -688,63 +670,131 @@
   </div>
 </section>
 
-<!-- ═══ MOCKUPS ═══ -->
+<!-- ═══ PAINÉIS ═══ -->
 <section class="sec" id="paineis">
   <div class="w">
     <div class="sh rv">
       <div class="tag">04 · Na prática</div>
-      <h2>Exemplos de painéis e leituras que nascem do projeto</h2>
-      <p>Representações conceituais — não promessa de interface final, mas demonstração do tipo de inteligência produzida.</p>
+      <h2>Painéis e leituras que nascem do projeto</h2>
+      <p>Exemplos conceituais de como a informação se organiza para apoiar decisão real. Não são promessa de interface — são demonstrações do tipo de inteligência que o projeto produz.</p>
     </div>
+
+    <!-- MOCK 1: Decisão por rótulo -->
     <div class="mock-grid rv">
       <div class="mock">
-        <div class="mock-head"><div><div class="mock-title">Decisão por rótulo</div><div class="mock-sub">Painel operacional · ilustrativo</div></div><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="mock-head"><div><div class="mock-title">Tomador de decisão · Rótulo</div><div class="mock-sub">Espumante Brut Rosé Cave Colonial · Fornec. A · Cx. 6 un.</div></div><div class="dots"><span></span><span></span><span></span></div></div>
         <div class="mock-body">
           <div class="kpi-row">
-            <div class="kpi"><span class="k-l">Estoque</span><span class="k-v">18</span><span class="k-s">garrafas</span></div>
-            <div class="kpi"><span class="k-l">Venda 30d</span><span class="k-v">14</span><span class="k-s">+22% vs mês ant.</span></div>
-            <div class="kpi"><span class="k-l">Cobertura</span><span class="k-v">39</span><span class="k-s">dias</span></div>
-            <div class="kpi"><span class="k-l">Sugestão</span><span class="k-v">24</span><span class="k-s">garrafas</span></div>
+            <div class="kpi"><span class="k-l">Estoque</span><span class="k-v">24</span><span class="k-s">garrafas</span></div>
+            <div class="kpi"><span class="k-l">Venda 30d</span><span class="k-v">18</span><span class="k-s">+34% vs mês ant.</span></div>
+            <div class="kpi"><span class="k-l">Cobertura</span><span class="k-v">40d</span><span class="k-s">24 ÷ 0,6/dia</span></div>
+            <div class="kpi"><span class="k-l">Sugestão</span><span class="k-v">36</span><span class="k-s">6 cx · cobrir 90d</span></div>
           </div>
           <div class="m-cols">
-            <div class="m-box"><h4>Análise</h4>
-              <div class="m-row"><div><div class="m-row-t">Espumante Brut Rosé</div><div class="m-row-s">Premium · Fornec. B</div></div><span class="flag attn">sazonal</span></div>
-              <div class="m-row"><div><div class="m-row-t">Histórico</div><div class="m-row-s">Aceleração nov–dez</div></div><span class="flag ok">giro ok</span></div>
-              <div class="m-row"><div><div class="m-row-t">Sistema</div><div class="m-row-s">Cobertura curta</div></div><span class="flag warn">ruptura</span></div>
+            <div class="m-box"><h4>Leitura do sistema</h4>
+              <div class="m-row"><div><div class="m-row-t">Sazonalidade detectada</div><div class="m-row-s">Aceleração de +34% indica entrada em janela sazonal (Dia das Mães + primavera)</div></div><span class="flag attn">atenção</span></div>
+              <div class="m-row"><div><div class="m-row-t">Cobertura insuficiente</div><div class="m-row-s">40 dias não cobre o pico previsto. Lead time do fornecedor: 14 dias</div></div><span class="flag warn">comprar</span></div>
+              <div class="m-row"><div><div class="m-row-t">Margem protegida</div><div class="m-row-s">Markup de 2,4x mantido. Sem necessidade de reajuste de preço</div></div><span class="flag ok">ok</span></div>
             </div>
-            <div class="m-box"><h4>Venda · 6 meses</h4>
-              <div class="bars"><div class="bar g" style="height:34px"></div><div class="bar g" style="height:40px"></div><div class="bar s" style="height:48px"></div><div class="bar s" style="height:60px"></div><div class="bar w" style="height:80px"></div><div class="bar w" style="height:90px"></div></div>
-              <div class="bar-lbl"><span>Jul</span><span>Ago</span><span>Set</span><span>Out</span><span>Nov</span><span>Dez</span></div>
+            <div class="m-box"><h4>Venda mensal · últimos 6 meses</h4>
+              <div class="bars">
+                <div class="bar g" style="height:22px" title="6 un."></div>
+                <div class="bar g" style="height:28px" title="8 un."></div>
+                <div class="bar s" style="height:36px" title="10 un."></div>
+                <div class="bar s" style="height:44px" title="12 un."></div>
+                <div class="bar w" style="height:60px" title="16 un."></div>
+                <div class="bar w" style="height:82px" title="18 un."></div>
+              </div>
+              <div class="bar-lbl"><span>Out</span><span>Nov</span><span>Dez</span><span>Jan</span><span>Fev</span><span>Mar</span></div>
+              <div style="margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--wine-bg);border:1px solid rgba(122,32,56,.10);">
+                <div style="font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--wine);font-weight:700;">Projeção</div>
+                <div style="font-size:11px;color:var(--ink3);margin-top:4px;line-height:1.5;">Abr: ~22 un. · Mai: ~28 un. (pico Dia das Mães)</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- MOCK 2: Motor de decisão -->
       <div class="mock">
-        <div class="mock-head"><div><div class="mock-title">Matriz de rótulos</div><div class="mock-sub">Classificação estratégica</div></div><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="mock-head"><div><div class="mock-title">Motor de decisão de compra</div><div class="mock-sub">Recomendação automática · março 2026</div></div><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="mock-body">
+          <div style="padding:14px 16px;border-radius:12px;background:var(--gold-bg);border:1px solid rgba(156,122,46,.14);margin-bottom:14px;">
+            <h4 style="font-size:13px;margin-bottom:6px;color:var(--gold);">Resumo do raciocínio</h4>
+            <p style="font-size:12.5px;line-height:1.6;color:var(--ink3);">Estoque atual cobre 40 dias, mas a projeção indica aceleração de +55% no bimestre abr–mai. Lead time do fornecedor é 14 dias. Comprar agora garante cobertura sem ruptura.</p>
+          </div>
+          <div style="padding:14px 16px;border-radius:12px;background:var(--sage-bg);border:1px solid rgba(44,104,84,.14);margin-bottom:14px;">
+            <h4 style="font-size:13px;margin-bottom:6px;color:var(--sage);">Sugestão de compra</h4>
+            <p style="font-size:12.5px;line-height:1.6;color:var(--ink3);">Comprar <strong>36 garrafas</strong> (6 caixas) agora via Fornecedor A. Revisar novamente em 30 dias. Manter alternativa (Brut Blanc) como backup na mesma faixa.</p>
+          </div>
+          <table style="width:100%;border-collapse:collapse;margin-top:4px;">
+            <thead><tr><th style="padding:10px 12px;">Mês</th><th style="padding:10px 12px;">Venda prev.</th><th style="padding:10px 12px;">Estoque proj.</th><th style="padding:10px 12px;">Ação</th></tr></thead>
+            <tbody>
+              <tr><td style="padding:10px 12px;font-size:13px;">Abr</td><td style="padding:10px 12px;font-size:13px;">22 un.</td><td style="padding:10px 12px;font-size:13px;">38 un.</td><td style="padding:10px 12px;"><span class="flag ok">ok</span></td></tr>
+              <tr><td style="padding:10px 12px;font-size:13px;">Mai</td><td style="padding:10px 12px;font-size:13px;">28 un.</td><td style="padding:10px 12px;font-size:13px;">10 un.</td><td style="padding:10px 12px;"><span class="flag attn">revisar</span></td></tr>
+              <tr style="border-bottom:none;"><td style="padding:10px 12px;font-size:13px;">Jun</td><td style="padding:10px 12px;font-size:13px;">14 un.</td><td style="padding:10px 12px;font-size:13px;">−4 un.</td><td style="padding:10px 12px;"><span class="flag warn">ruptura</span></td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:11px;color:var(--muted);margin-top:10px;font-style:italic;">* Sem a compra sugerida, ruptura prevista para início de junho. Com 6 cx agora, cobertura garantida até jul.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOCK 3 + 4: Matriz + Mapa fornecedor -->
+    <div class="mock-grid rv" style="margin-top:20px;">
+      <div class="mock">
+        <div class="mock-head"><div><div class="mock-title">Matriz de função dos rótulos</div><div class="mock-sub">Classificação estratégica · amostra do portfólio</div></div><div class="dots"><span></span><span></span><span></span></div></div>
         <div class="mock-body" style="padding:0;">
-          <table><thead><tr><th>Rótulo</th><th>Categoria</th><th>Papel</th><th>Status</th></tr></thead>
+          <table><thead><tr><th>Rótulo</th><th>Faixa</th><th>Papel</th><th>Ação</th></tr></thead>
           <tbody>
-            <tr><td><strong>Malbec Reserva X</strong></td><td>Tinto · Média</td><td>Giro + margem</td><td><span class="flag ok">manter</span></td></tr>
-            <tr><td><strong>Sauv. Blanc Y</strong></td><td>Branco · Entrada</td><td>Volume</td><td><span class="flag ok">manter</span></td></tr>
-            <tr><td><strong>Cab. Sauv. Z</strong></td><td>Tinto · Média</td><td>Sobreposto</td><td><span class="flag attn">avaliar</span></td></tr>
-            <tr><td><strong>Espum. Brut W</strong></td><td>Espum. · Premium</td><td>Imagem</td><td><span class="flag ok">reforçar</span></td></tr>
-            <tr><td><strong>Rosé V</strong></td><td>Rosé · Média</td><td>Baixo giro</td><td><span class="flag warn">cortar</span></td></tr>
-            <tr><td><strong>Pinot Noir U</strong></td><td>Tinto · Premium</td><td>Lacuna</td><td><span class="flag attn">incluir</span></td></tr>
+            <tr><td><strong>Malbec Reserva Altos del Plata</strong></td><td>Tinto · R$ 80–120</td><td>Giro + margem</td><td><span class="flag ok">manter</span></td></tr>
+            <tr><td><strong>Sauvignon Blanc Valle Central</strong></td><td>Branco · R$ 45–65</td><td>Volume · entrada</td><td><span class="flag ok">manter</span></td></tr>
+            <tr><td><strong>Cabernet Sauvignon Los Andes</strong></td><td>Tinto · R$ 70–100</td><td>Sobreposto c/ Malbec</td><td><span class="flag warn">substituir</span></td></tr>
+            <tr><td><strong>Espumante Brut Rosé Cave Colonial</strong></td><td>Espum. · R$ 90–130</td><td>Imagem + sazonal</td><td><span class="flag ok">reforçar</span></td></tr>
+            <tr><td><strong>Rosé Cuvée Classique</strong></td><td>Rosé · R$ 40–55</td><td>Giro lento · 0,3/dia</td><td><span class="flag warn">descontinuar</span></td></tr>
+            <tr><td><strong>Chardonnay Gran Reserva Costa</strong></td><td>Branco · R$ 65–90</td><td>Lacuna — branco premium</td><td><span class="flag attn">incluir</span></td></tr>
+            <tr><td><strong>Pinot Noir Selection Patagonia</strong></td><td>Tinto · R$ 110–150</td><td>Lacuna — tinto leve premium</td><td><span class="flag attn">incluir</span></td></tr>
           </tbody></table>
         </div>
       </div>
+
+      <div class="mock">
+        <div class="mock-head"><div><div class="mock-title">Mapa de compra por fornecedor</div><div class="mock-sub">Rodada consolidada · março 2026</div></div><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="mock-body">
+          <div style="padding:14px 16px;border-radius:12px;background:var(--bg);border:1px solid var(--border);margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;"><h4 style="font-size:13px;">Fornecedor A · Importadora</h4><span class="flag ok" style="font-size:10px;">5 itens</span></div>
+            <p style="font-size:12px;color:var(--muted);margin-top:6px;">R$ 3.420 · Mín. R$ 2.500 ✓ · Cx. fechada · Lead 14d · 5% desc. à vista</p>
+          </div>
+          <div style="padding:14px 16px;border-radius:12px;background:var(--bg);border:1px solid var(--border);margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;"><h4 style="font-size:13px;">Fornecedor B · Distribuidor</h4><span class="flag ok" style="font-size:10px;">3 itens</span></div>
+            <p style="font-size:12px;color:var(--muted);margin-top:6px;">R$ 2.160 · Mín. R$ 1.500 ✓ · Frete grátis > R$ 2.000 ✓ · Lead 7d</p>
+          </div>
+          <div style="padding:14px 16px;border-radius:12px;background:var(--bg);border:1px solid var(--border);margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;"><h4 style="font-size:13px;">Fornecedor C · Direto vinícola</h4><span class="flag attn" style="font-size:10px;">2 itens · teste</span></div>
+            <p style="font-size:12px;color:var(--muted);margin-top:6px;">R$ 890 · Mín. R$ 600 ✓ · Sem bonificação · Lead 10d · Novos rótulos</p>
+          </div>
+          <div style="padding:14px 16px;border-radius:14px;background:var(--sage-bg);border:1px solid rgba(44,104,84,.14);margin-top:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <strong style="color:var(--sage);font-size:13px;">Total da rodada</strong>
+              <span style="color:var(--sage);font-size:13px;font-weight:700;font-family:var(--mono);">R$ 6.470</span>
+            </div>
+            <p style="font-size:11px;color:var(--sage);margin-top:4px;">10 itens · 3 fornecedores · Todos dentro do mínimo · Próxima revisão: 18/abr</p>
+          </div>
+        </div>
+      </div>
     </div>
+
     <!-- Sazonalidade -->
     <div class="season-grid rv" style="margin-top:20px;">
-      <div class="season-card"><div class="kicker kicker-gold">Calendário</div><h4 style="margin-top:12px;">Leitura antecipada</h4><div style="margin-top:14px;">
-        <div class="s-item"><strong>Dia das Mães</strong><span>Espumantes, rosés, brancos aromáticos. Janela: mar–abr.</span></div>
-        <div class="s-item"><strong>Inverno</strong><span>Tintos estruturados, faixas médias e premium.</span></div>
-        <div class="s-item"><strong>Fim de ano</strong><span>Espumantes e itens de celebração. Revisão antes de outubro.</span></div>
+      <div class="season-card"><div class="kicker kicker-gold">Calendário comercial</div><h4 style="margin-top:12px;">Leitura antecipada da categoria</h4><div style="margin-top:14px;">
+        <div class="s-item"><strong>Dia das Mães · mai</strong><span>Espumantes, rosés, brancos aromáticos e rótulos com apelo de presente. Janela de compra: mar–abr.</span></div>
+        <div class="s-item"><strong>Inverno · jun–ago</strong><span>Tintos de maior estrutura, faixas médias e premium com boa relação valor percebido. Reforço a partir de mai.</span></div>
+        <div class="s-item"><strong>Fim de ano · nov–dez</strong><span>Espumantes e itens de celebração. Revisão de cobertura obrigatória antes de outubro (lead time!).</span></div>
       </div></div>
-      <div class="season-card"><h4>Alertas executivos</h4><div style="margin-top:14px;">
-        <div class="event"><div class="date">Mar–Abr</div><div><strong>Dia das Mães</strong><p>Rever espumantes, rosés e brancos de apelo visual.</p></div></div>
-        <div class="event"><div class="date">Mai–Jun</div><div><strong>Período frio</strong><p>Reforçar tintos gastronômicos.</p></div></div>
-        <div class="event"><div class="date">Out–Nov</div><div><strong>Fim de ano</strong><p>Antecipar compra de espumantes com lead time.</p></div></div>
+      <div class="season-card"><h4>Alertas executivos · exemplo</h4><div style="margin-top:14px;">
+        <div class="event"><div class="date">Mar–Abr</div><div><strong>Preparação Dia das Mães</strong><p>Rever espumantes, rosés e brancos. Incluir 2–3 rótulos de apelo visual e boa margem.</p></div></div>
+        <div class="event"><div class="date">Mai–Jun</div><div><strong>Virada para inverno</strong><p>Reforçar tintos gastronômicos. Revisar cobertura de categorias com melhor performance no frio.</p></div></div>
+        <div class="event"><div class="date">Set–Out</div><div><strong>Antecipação fim de ano</strong><p>Antecipar compra de espumantes respeitando lead time e múltiplos de caixa por fornecedor.</p></div></div>
       </div></div>
     </div>
   </div>
@@ -756,38 +806,52 @@
     <div class="sh rv">
       <div class="tag">05 · Automação de pedidos</div>
       <h2>Do racional ao pedido pronto — organizado e enviável</h2>
+      <p>O sistema gera a sugestão com base nos critérios validados. O operador revisa, ajusta e dispara — formatado por fornecedor, pronto para envio.</p>
     </div>
     <div class="auto-flow rv">
       <div>
         <div class="order-mock">
-          <div class="order-head"><div><div class="mock-title">Pedido · Fornecedor B</div><div class="mock-sub">19 mar 2026</div></div><div class="dots"><span></span><span></span><span></span></div></div>
+          <div class="order-head"><div><div class="mock-title">Pedido · Fornecedor A — Importadora</div><div class="mock-sub">Rodada de compra · 19 mar 2026</div></div><div class="dots"><span></span><span></span><span></span></div></div>
           <div class="order-body">
-            <div class="oi"><div class="oi-name">Espumante Brut Rosé<small>Cx. 6 · Cód. 4821</small></div><div class="oi-qty">4 cx</div><div class="oi-val">R$ 1.440</div><span class="flag warn">ruptura</span></div>
-            <div class="oi"><div class="oi-name">Sauvignon Blanc Y<small>Cx. 6 · Cód. 3105</small></div><div class="oi-qty">3 cx</div><div class="oi-val">R$ 810</div><span class="flag attn">cobertura</span></div>
-            <div class="oi"><div class="oi-name">Malbec Reserva X<small>Cx. 12 · Cód. 2290</small></div><div class="oi-qty">2 cx</div><div class="oi-val">R$ 1.080</div><span class="flag ok">reposição</span></div>
-            <div class="order-total"><strong>11 cx · R$ 4.120</strong><span>Mín. ✓ · Frete grátis ✓</span></div>
-            <div class="btn-row"><button class="btn primary">✓ Enviar via WhatsApp</button><button class="btn sec">✎ Ajustar</button><button class="btn sec">↓ PDF</button></div>
+            <div style="padding:6px 12px 4px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--wine);">Itens sugeridos para esta rodada</div>
+            <div class="oi"><div class="oi-name">Espumante Brut Rosé Cave Colonial<small>Cx. 6 un. · Cód. 1847 · R$ 90/un.</small></div><div class="oi-qty">6 cx</div><div class="oi-val">R$ 3.240</div><span class="flag warn">cobertura baixa</span></div>
+            <div class="oi"><div class="oi-name">Malbec Reserva Altos del Plata<small>Cx. 6 un. · Cód. 2103 · R$ 79/un.</small></div><div class="oi-qty">3 cx</div><div class="oi-val">R$ 1.422</div><span class="flag ok">reposição padrão</span></div>
+            <div class="oi"><div class="oi-name">Chardonnay Gran Reserva Costa<small>Cx. 6 un. · Cód. 3291 · R$ 72/un.</small></div><div class="oi-qty">2 cx</div><div class="oi-val">R$ 864</div><span class="flag attn">inclusão nova</span></div>
+            <div class="order-total"><strong>11 cx (66 un.) · R$ 5.526</strong><span>Mín. R$ 2.500 ✓ · Desc. 5% à vista = R$ 5.250</span></div>
+            <div class="btn-row"><button class="btn primary">✓ Aprovar e enviar</button><button class="btn sec">✎ Ajustar qtd.</button><button class="btn sec">↓ Exportar PDF</button></div>
           </div>
         </div>
       </div>
       <div class="auto-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg><span class="arr-txt">Envio</span></div>
       <div>
         <div class="wa-mock">
-          <div class="wa-head"><div class="wa-avatar">FB</div><div><div class="wa-name">Fornecedor B</div><div class="wa-status">online</div></div></div>
+          <div class="wa-head"><div class="wa-avatar">IA</div><div><div class="wa-name">Importadora A — Comercial</div><div class="wa-status">online</div></div></div>
           <div class="wa-body">
-            <div class="wa-bubble sent"><strong>Pedido — Unidade</strong><span class="wa-mono">📋 PEDIDO #PAR-2026-0319
-Fornecedor: Importadora B
-━━━━━━━━━━━━━━━━━
-1. Espumante Brut Rosé
-   4 cx (24 un.) — R$ 1.440
-2. Sauvignon Blanc Y
-   3 cx (18 un.) — R$ 810
-3. Malbec Reserva X
-   2 cx (24 un.) — R$ 1.080
-━━━━━━━━━━━━━━━━━
-TOTAL: 11 cx · R$ 4.120
-Frete grátis · Entrega: 26/03</span><span class="wa-time">14:32 ✓✓</span></div>
-            <div class="wa-bubble recv">Pedido recebido! Confirmo em instantes. 👍<span class="wa-time">14:35</span></div>
+            <div class="wa-bubble sent"><strong>Pedido — Restaurante Exemplo</strong><span class="wa-mono">📋 PEDIDO #PAR-2026-0319
+
+Fornecedor: Importadora A
+Cliente: Restaurante Exemplo
+Data: 19/03/2026
+
+ITENS:
+━━━━━━━━━━━━━━━━━━━
+1. Espum. Brut Rosé Cave Colonial
+   6 cx (36 un.) — R$ 3.240
+
+2. Malbec Reserva Altos del Plata
+   3 cx (18 un.) — R$ 1.422
+
+3. Chardonnay Gran Res. Costa
+   2 cx (12 un.) — R$ 864
+
+━━━━━━━━━━━━━━━━━━━
+TOTAL: 11 cx (66 un.)
+Valor: R$ 5.526
+Desc. 5% à vista: R$ 5.250
+Entrega prevista: até 02/04
+
+Resp.: João / Compras</span><span class="wa-time">14:32 ✓✓</span></div>
+            <div class="wa-bubble recv">Boa tarde João! Pedido recebido, tudo em estoque. Confirmo envio amanhã com entrega até 01/04. Obrigado! 👍<span class="wa-time">14:38</span></div>
           </div>
         </div>
       </div>
