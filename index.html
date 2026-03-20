@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta name="robots" content="noindex"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PARCELLE — Gestão inteligente da categoria vinho</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#f6f1ea; --bg2:#ede6db; --bg3:#e4dbd0;
+      --paper:#fffcf7; --paper2:#faf6ef;
+      --ink:#1a1613; --ink2:#2e2925; --ink3:#524a43;
+      --muted:#8c8278; --muted2:#a89e94;
+      --border:rgba(26,22,19,.10); --border2:rgba(26,22,19,.16);
+      --wine:#7a2038; --wine2:#a83050; --wine-bg:rgba(122,32,56,.06);
+      --gold:#9c7a2e; --gold2:#c49a3a; --gold-bg:rgba(156,122,46,.07);
+      --sage:#2c6854; --sage-bg:rgba(44,104,84,.06);
+      --cream:#faf6ee;
+      --serif:'Instrument Serif',Georgia,serif;
+      --sans:'Syne',system-ui,sans-serif;
+      --mono:'Space Mono',monospace;
+      --max:1280px;
+      --ease:cubic-bezier(.22,1,.36,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--sans);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+    /* GRAIN */
+    body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px;}
+
+    /* ANIMATIONS */
+    .rv{opacity:0;transform:translateY(36px);transition:opacity .9s var(--ease),transform .9s var(--ease);}
+    .rv.vis{opacity:1;transform:translateY(0);}
+    .rv-d1{transition-delay:.1s}.rv-d2{transition-delay:.2s}.rv-d3{transition-delay:.3s}.rv-d4{transition-delay:.4s}.rv-d5{transition-delay:.5s}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @keyframes draw{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+
+    /* LAYOUT */
+    .w{max-width:var(--max);margin:0 auto;padding:0 48px;}
+    .sec{padding:120px 0;position:relative;}
+
+    /* NAV */
+    .nav{position:sticky;top:0;z-index:100;background:rgba(246,241,234,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s ease;}
+    .nav.scrolled{box-shadow:0 4px 24px rgba(26,22,19,.06);}
+    .nav-in{max-width:var(--max);margin:0 auto;padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;}
+    .nav-logo{display:flex;align-items:baseline;gap:10px;}
+    .nav-logo .mark{font-family:var(--sans);font-size:15px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);}
+    .nav-logo .dot{width:6px;height:6px;border-radius:50%;background:var(--wine);display:inline-block;}
+    .nav-links{display:flex;gap:6px;}
+    .nav-links a{padding:6px 14px;border-radius:999px;font-size:11px;font-weight:700;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:all .2s ease;}
+    .nav-links a:hover,.nav-links a.active{color:var(--ink);background:var(--bg2);}
+
+    /* TYPOGRAPHY */
+    h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:400;}
+    h1{font-size:clamp(48px,7vw,96px);line-height:.92;letter-spacing:-.04em;}
+    h2{font-size:clamp(36px,4.5vw,56px);line-height:1.02;letter-spacing:-.03em;}
+    h3{font-size:clamp(24px,2.8vw,32px);line-height:1.12;letter-spacing:-.02em;}
+    h4{font-size:16px;font-weight:700;color:var(--ink);line-height:1.4;font-family:var(--sans);}
+    p{font-size:15.5px;line-height:1.8;color:var(--ink3);font-weight:400;}
+    .lead{font-size:18px;line-height:1.75;color:var(--ink2);}
+    strong{color:var(--ink);font-weight:700;}
+
+    .tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--wine);}
+    .tag::before{content:"";width:24px;height:1.5px;background:var(--wine);}
+    .tag-gold{color:var(--gold);}
+    .tag-gold::before{background:var(--gold);}
+    .tag-sage{color:var(--sage);}
+    .tag-sage::before{background:var(--sage);}
+
+    .num{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--ink);font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);flex-shrink:0;}
+
+    /* HERO */
+    .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;}
+    .hero::before{content:"";position:absolute;right:-10%;top:-20%;width:60%;height:120%;border-radius:50%;background:radial-gradient(ellipse,rgba(122,32,56,.04),transparent 70%);pointer-events:none;}
+    .hero-inner{display:grid;grid-template-columns:1fr 380px;gap:80px;align-items:center;position:relative;z-index:2;}
+    .hero-title em{font-style:italic;color:var(--wine);}
+    .hero-desc{margin-top:28px;max-width:600px;}
+    .hero-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;}
+    .pill{display:inline-flex;padding:8px 14px;border-radius:999px;border:1px solid var(--border2);font-size:12px;font-weight:600;color:var(--ink3);transition:all .2s ease;background:var(--paper);}
+    .pill:hover{border-color:var(--wine);color:var(--wine);background:var(--wine-bg);}
+
+    .hero-aside{display:flex;flex-direction:column;gap:14px;}
+    .hero-block{padding:24px;border-radius:20px;background:var(--paper);border:1px solid var(--border);}
+    .hero-block .hb-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--wine);margin-bottom:8px;}
+    .hero-block .hb-val{font-size:15px;line-height:1.6;color:var(--ink2);}
+
+    .thesis{margin-top:48px;padding:36px;border-radius:24px;background:var(--paper);border:1px solid var(--border);position:relative;overflow:hidden;}
+    .thesis::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--wine),var(--gold));}
+    .thesis p{font-size:16px;padding-left:16px;color:var(--ink2);}
+    .thesis strong{color:var(--wine);}
+
+    /* MARQUEE */
+    .marquee-strip{padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;background:var(--paper2);}
+    .marquee-track{display:flex;gap:40px;animation:marquee 30s linear infinite;width:max-content;}
+    .marquee-item{font-family:var(--serif);font-size:20px;color:var(--muted2);white-space:nowrap;font-style:italic;}
+    .marquee-item .sep{color:var(--wine);margin:0 16px;font-style:normal;}
+
+    /* MARKET */
+    .market{background:var(--paper);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+    .market-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+    .market-card{padding:36px 28px;text-align:center;border-right:1px solid var(--border);position:relative;}
+    .market-card:last-child{border-right:none;}
+    .mc-num{font-family:var(--serif);font-size:52px;color:var(--wine);line-height:1;letter-spacing:-.03em;}
+    .mc-unit{font-family:var(--mono);font-size:12px;color:var(--wine);opacity:.7;}
+    .mc-label{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.5;}
+    .mc-src{margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--muted2);}
+
+    /* SECTION HEADER */
+    .sh{margin-bottom:56px;}
+    .sh h2{margin-top:12px;max-width:780px;}
+    .sh p{margin-top:16px;max-width:660px;}
+
+    /* CONTEXT */
+    .ctx-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:32px;}
+    .ctx-main{padding:44px;border-radius:28px;background:var(--paper);border:1px solid var(--border);}
+    .ctx-callout{margin-top:24px;padding:20px 24px;border-radius:16px;background:var(--sage-bg);border:1px solid rgba(44,104,84,.14);}
+    .ctx-callout p{color:var(--sage);}
+    .ctx-callout strong{color:#1a4a3a;}
+    .ctx-side{display:grid;gap:12px;}
+    .ctx-card{padding:22px;border-radius:18px;background:var(--paper);border:1px solid var(--border);transition:all .3s var(--ease);}
+    .ctx-card:hover{transform:translateX(6px);border-color:var(--border2);}
+    .ctx-card strong{display:block;font-size:14px;margin-bottom:4px;}
+    .ctx-card span{font-size:13.5px;line-height:1.6;color:var(--muted);}
+
+    /* CARDS */
+    .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    .card{padding:32px;border-radius:24px;background:var(--paper);border:1px solid var(--border);transition:all .3s var(--ease);}
+    .card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(26,22,19,.06);}
+    .kicker{display:inline-flex;padding:5px 10px;border-radius:999px;background:var(--wine-bg);border:1px solid rgba(122,32,56,.12);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--wine);margin-bottom:14px;}
+    .kicker-gold{background:var(--gold-bg);border-color:rgba(156,122,46,.14);color:var(--gold);}
+    .kicker-sage{background:var(--sage-bg);border-color:rgba(44,104,84,.14);color:var(--sage);}
+    .card h4{margin-bottom:8px;}
+    .card p{font-size:14px;}
+
+    /* PILLAR */
+    .pillar{padding:56px;border-radius:32px;background:var(--ink);color:#fff;position:relative;overflow:hidden;}
+    .pillar::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,rgba(122,32,56,.2),transparent 50%),radial-gradient(ellipse at 20% 80%,rgba(156,122,46,.12),transparent 50%);pointer-events:none;}
+    .pillar .tag{color:rgba(255,255,255,.5);}
+    .pillar .tag::before{background:rgba(255,255,255,.3);}
+    .pillar h2,.pillar h3,.pillar h4,.pillar strong{color:#fff;}
+    .pillar p{color:rgba(255,255,255,.7);}
+    .p-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px;position:relative;z-index:1;}
+    .p-card{padding:26px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);transition:all .3s var(--ease);}
+    .p-card:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.14);}
+    .p-card .p-icon{width:36px;height:36px;border-radius:10px;background:rgba(156,122,46,.2);display:grid;place-items:center;font-size:14px;margin-bottom:12px;color:var(--gold2);}
+    .p-card h4{margin-bottom:6px;font-size:15px;}
+    .p-card p{font-size:13.5px;line-height:1.55;}
+
+    /* SERVICES EXPANDED */
+    .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .svc{padding:32px;border-radius:24px;background:var(--paper);border:1px solid var(--border);position:relative;overflow:hidden;transition:all .3s var(--ease);}
+    .svc:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(26,22,19,.06);}
+    .svc .svc-num{position:absolute;top:20px;right:24px;font-family:var(--serif);font-size:56px;color:var(--bg2);line-height:1;font-style:italic;}
+    .svc h4{margin-bottom:8px;position:relative;z-index:1;}
+    .svc p{font-size:14px;position:relative;z-index:1;}
+
+    /* MOCKUPS */
+    .mock-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    .mock{border-radius:24px;overflow:hidden;border:1px solid var(--border);background:var(--paper);transition:all .35s var(--ease);}
+    .mock:hover{transform:translateY(-4px);box-shadow:0 20px 52px rgba(26,22,19,.08);}
+    .mock-head{display:flex;justify-content:space-between;align-items:center;padding:14px 22px;background:var(--ink);border-bottom:1px solid rgba(255,255,255,.08);}
+    .mock-title{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;}
+    .mock-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:2px;}
+    .dots{display:flex;gap:5px;}
+    .dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18);}
+    .mock-body{padding:22px;background:linear-gradient(180deg,var(--paper) 0%,var(--paper2) 100%);}
+    .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+    .kpi{padding:12px;border-radius:12px;background:var(--bg);border:1px solid var(--border);}
+    .kpi .k-l{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--wine);font-weight:700;margin-bottom:4px;}
+    .kpi .k-v{display:block;font-family:var(--serif);font-size:24px;color:var(--ink);letter-spacing:-.02em;}
+    .kpi .k-s{display:block;font-size:10px;color:var(--muted);margin-top:2px;}
+    .m-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+    .m-box{padding:16px;border-radius:12px;background:var(--bg);border:1px solid var(--border);}
+    .m-box h4{font-size:13px;margin-bottom:10px;}
+    .m-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
+    .m-row:last-child{border-bottom:none;}
+    .m-row-t{font-size:12.5px;font-weight:600;color:var(--ink);}
+    .m-row-s{font-size:10.5px;color:var(--muted);margin-top:1px;}
+    .flag{display:inline-flex;padding:4px 8px;border-radius:999px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;}
+    .flag.ok{background:var(--sage-bg);color:var(--sage);}
+    .flag.warn{background:var(--wine-bg);color:var(--wine);}
+    .flag.attn{background:var(--gold-bg);color:var(--gold);}
+    .bars{display:flex;align-items:flex-end;gap:6px;height:90px;}
+    .bar{flex:1;border-radius:5px 5px 0 0;min-width:16px;}
+    .bar.g{background:linear-gradient(180deg,var(--gold2),var(--gold));}
+    .bar.w{background:linear-gradient(180deg,var(--wine2),var(--wine));}
+    .bar.s{background:linear-gradient(180deg,#5cb89c,var(--sage));}
+    .bar-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:5px;}
+
+    /* TABLE */
+    .tbl-shell{border-radius:20px;overflow:hidden;border:1px solid var(--border);background:var(--paper);}
+    table{width:100%;border-collapse:collapse;}
+    th,td{padding:14px 18px;border-bottom:1px solid var(--border);text-align:left;font-size:14px;}
+    th{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--wine);background:var(--bg);font-weight:700;}
+    td{color:var(--ink3);}td strong{color:var(--ink);}
+    tr:last-child td{border-bottom:none;}
+    tr.hl td{background:var(--gold-bg);}
+
+    /* AUTOMATION */
+    .auto-flow{display:grid;grid-template-columns:1fr 72px 1fr;gap:0;align-items:stretch;}
+    .auto-arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--wine);}
+    .auto-arrow .arr-txt{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:8px;writing-mode:vertical-rl;transform:rotate(180deg);}
+    .order-mock{border-radius:24px;overflow:hidden;border:1px solid var(--border);background:var(--paper);}
+    .order-head{padding:14px 22px;background:var(--ink);display:flex;justify-content:space-between;align-items:center;}
+    .order-body{padding:22px;}
+    .oi{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;}
+    .oi:last-child{border-bottom:none;}
+    .oi-name{font-weight:600;color:var(--ink);}
+    .oi-name small{font-size:10px;color:var(--muted);font-weight:400;display:block;margin-top:1px;}
+    .oi-qty{padding:4px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--border);font-family:var(--mono);font-weight:700;font-size:11px;color:var(--ink);}
+    .oi-val{font-family:var(--mono);font-size:12px;color:var(--muted);}
+    .order-total{margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--sage-bg);border:1px solid rgba(44,104,84,.14);display:flex;justify-content:space-between;align-items:center;}
+    .order-total strong{color:var(--sage);font-size:13px;}
+    .order-total span{color:var(--sage);font-size:12px;font-weight:600;}
+    .btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:999px;font-family:var(--sans);font-size:11px;font-weight:700;border:none;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;}
+    .btn.primary{background:var(--wine);color:#fff;}
+    .btn.sec{background:var(--bg2);color:var(--ink);border:1px solid var(--border2);}
+
+    /* WHATSAPP */
+    .wa-mock{border-radius:24px;overflow:hidden;border:1px solid var(--border);}
+    .wa-head{padding:12px 16px;background:linear-gradient(135deg,#075e54,#128c7e);display:flex;align-items:center;gap:10px;}
+    .wa-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;}
+    .wa-name{font-size:13px;font-weight:600;color:#fff;}
+    .wa-status{font-size:10px;color:rgba(255,255,255,.6);}
+    .wa-body{padding:16px;min-height:220px;background:#e5ddd5;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0z' fill='%23d9cec5' fill-opacity='.08'/%3E%3C/svg%3E");}
+    .wa-bubble{max-width:88%;padding:10px 14px;border-radius:10px;font-size:12.5px;line-height:1.55;margin-bottom:8px;}
+    .wa-bubble.sent{background:#dcf8c6;color:var(--ink);margin-left:auto;border-bottom-right-radius:2px;}
+    .wa-bubble.recv{background:#fff;color:var(--ink);margin-right:auto;border-bottom-left-radius:2px;}
+    .wa-bubble .wa-time{display:block;text-align:right;font-size:9px;color:rgba(0,0,0,.35);margin-top:3px;}
+    .wa-mono{display:block;margin-top:6px;padding:8px 10px;background:rgba(0,0,0,.04);border-radius:6px;font-family:var(--mono);font-size:10px;line-height:1.6;white-space:pre-line;color:var(--ink2);}
+
+    /* PHASES */
+    .phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .phase{padding:36px;border-radius:28px;background:var(--paper);border:1px solid var(--border);position:relative;overflow:hidden;transition:all .35s var(--ease);}
+    .phase:hover{transform:translateY(-4px);}
+    .phase.feat{border-color:var(--wine);background:linear-gradient(160deg,var(--paper),var(--wine-bg));}
+    .phase-num{font-family:var(--serif);font-size:64px;color:var(--bg2);line-height:1;position:absolute;top:20px;right:24px;font-style:italic;}
+    .phase.feat .phase-num{color:rgba(122,32,56,.08);}
+    .phase h3{font-size:22px;position:relative;z-index:1;}
+    .phase p{margin-top:10px;font-size:14.5px;position:relative;z-index:1;}
+    ul.cl{margin:14px 0 0;padding:0;list-style:none;}
+    ul.cl li{margin:8px 0;padding-left:16px;position:relative;font-size:14px;line-height:1.65;color:var(--ink3);}
+    ul.cl li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--wine);}
+    ul.cl li strong{color:var(--ink);}
+
+    /* RESULTS */
+    .res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+    .res{padding:28px;border-radius:24px;background:var(--paper);border:1px solid var(--border);text-align:center;transition:all .3s var(--ease);}
+    .res:hover{transform:translateY(-4px);border-color:var(--wine);box-shadow:0 12px 36px rgba(122,32,56,.06);}
+    .res strong{display:block;font-size:15px;margin-bottom:6px;}
+    .res p{font-size:13px;}
+
+    /* COMMERCIAL */
+    .comm-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start;}
+    .price-block{padding:48px;border-radius:32px;background:var(--ink);color:#fff;position:relative;overflow:hidden;}
+    .price-block::after{content:"";position:absolute;right:-30px;bottom:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(156,122,46,.2),transparent 70%);pointer-events:none;}
+    .price-block .tag{color:rgba(255,255,255,.5);}
+    .price-block .tag::before{background:rgba(255,255,255,.3);}
+    .price-block h2,.price-block strong{color:#fff;}
+    .price-block p{color:rgba(255,255,255,.7);}
+    .price-big{font-family:var(--serif);font-size:56px;font-style:italic;color:var(--gold2);line-height:1;margin:14px 0;position:relative;z-index:1;}
+
+    /* FAQ */
+    .faq-list{display:grid;gap:12px;}
+    .faq{padding:24px 28px;border-radius:20px;background:var(--paper);border:1px solid var(--border);transition:all .2s ease;}
+    .faq:hover{transform:translateX(6px);border-color:var(--border2);}
+    .faq h4{margin-bottom:6px;font-size:15px;}
+    .faq p{font-size:14.5px;}
+
+    /* FOOTER */
+    .footer{padding:80px 0;}
+    .footer-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:start;}
+    .footer-main,.footer-cta{padding:40px;border-radius:28px;background:var(--paper);border:1px solid var(--border);}
+    .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;}
+    .profile{padding:20px;border-radius:16px;background:var(--bg);border:1px solid var(--border);}
+    .profile .pb{display:inline-flex;padding:4px 8px;border-radius:999px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+    .pb.gold{background:var(--gold-bg);color:var(--gold);border:1px solid rgba(156,122,46,.14);}
+    .pb.wine{background:var(--wine-bg);color:var(--wine);border:1px solid rgba(122,32,56,.12);}
+    .profile .pn{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+    .profile .pd{font-size:12.5px;line-height:1.5;color:var(--muted);}
+    .connector{margin-top:18px;padding:18px;border-radius:16px;background:var(--gold-bg);border:1px solid rgba(156,122,46,.14);}
+    .connector p{font-size:14px;line-height:1.6;color:var(--ink2);}
+    .connector strong{color:var(--gold);}
+
+    .cta-btn{display:inline-flex;align-items:center;gap:10px;padding:16px 28px;border-radius:999px;background:var(--wine);color:#fff;font-size:15px;font-weight:700;text-decoration:none;transition:all .3s ease;border:none;cursor:pointer;}
+    .cta-btn:hover{background:var(--wine2);transform:translateY(-2px);box-shadow:0 12px 32px rgba(122,32,56,.2);}
+    .cta-btn svg{flex-shrink:0;}
+    .small{font-size:12px;color:var(--muted);line-height:1.5;}
+    .divider{height:1px;max-width:400px;margin:0 auto;background:linear-gradient(90deg,transparent,var(--border2),transparent);}
+
+    /* SEASON */
+    .season-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    .season-card{padding:32px;border-radius:24px;background:var(--paper);border:1px solid var(--border);}
+    .s-item{padding:14px;border-radius:12px;background:var(--bg);border:1px solid var(--border);margin-bottom:10px;transition:all .2s ease;}
+    .s-item:last-child{margin-bottom:0;}
+    .s-item:hover{transform:translateX(4px);}
+    .s-item strong{display:block;font-size:13px;color:var(--ink);margin-bottom:3px;}
+    .s-item span{font-size:12.5px;line-height:1.5;color:var(--muted);}
+    .event{display:grid;grid-template-columns:72px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+    .event:last-child{border-bottom:none;}
+    .event .date{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--wine);text-transform:uppercase;}
+    .event strong{font-size:13px;display:block;margin-bottom:3px;color:var(--ink);}
+    .event p{font-size:12.5px;line-height:1.5;color:var(--muted);}
+
+    /* RESPONSIVE */
+    @media(max-width:1100px){
+      .hero-inner,.ctx-grid,.comm-grid,.footer-grid,.auto-flow{grid-template-columns:1fr;}
+      .auto-flow{gap:16px;}.auto-arrow{flex-direction:row;padding:12px 0;}.auto-arrow .arr-txt{writing-mode:horizontal-tb;transform:none;}
+      .p-grid,.phase-grid,.res-grid,.svc-grid{grid-template-columns:1fr 1fr;}
+      .market-grid{grid-template-columns:1fr 1fr;}.market-card{border-right:none;border-bottom:1px solid var(--border);}
+    }
+    @media(max-width:720px){
+      .w{padding:0 20px;}.sec{padding:72px 0;}
+      .p-grid,.g3,.g2,.svc-grid,.phase-grid,.res-grid,.mock-grid,.season-grid,.profile-grid{grid-template-columns:1fr;}
+      .market-grid{grid-template-columns:1fr;}
+      .kpi-row{grid-template-columns:1fr 1fr;}
+      .nav-links{display:none;}.pillar{padding:28px;}
+    }
+    @media print{
+      @page{size:A4;margin:10mm;}body{background:#fff;}body::after{display:none;}.nav{display:none;}.rv{opacity:1!important;transform:none!important;}
+    }
+  
+    /* SIMPLE ACCESS GATE */
+    body.auth-locked{overflow:hidden;}
+    #authGate{
+      position:fixed; inset:0; z-index:100000;
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
+      background:
+        radial-gradient(ellipse at top right, rgba(122,32,56,.10), transparent 45%),
+        radial-gradient(ellipse at bottom left, rgba(156,122,46,.10), transparent 45%),
+        rgba(246,241,234,.98);
+      backdrop-filter: blur(12px);
+    }
+    #authGate[hidden]{display:none !important;}
+    .auth-card{
+      width:min(100%, 460px);
+      background:var(--paper);
+      border:1px solid var(--border2);
+      border-radius:28px;
+      padding:34px 30px 28px;
+      box-shadow:0 24px 80px rgba(26,22,19,.12);
+      text-align:center;
+    }
+    .auth-mark{
+      font-family:var(--sans);
+      font-size:15px;
+      font-weight:800;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      color:var(--ink);
+      margin-bottom:18px;
+    }
+    .auth-mark .dot{
+      display:inline-block;
+      width:6px; height:6px;
+      border-radius:50%;
+      background:var(--wine);
+      margin-left:8px;
+      vertical-align:middle;
+    }
+    .auth-card h1{
+      font-size:42px;
+      line-height:1;
+      letter-spacing:-.03em;
+      margin-bottom:12px;
+    }
+    .auth-card p{
+      font-size:14px;
+      line-height:1.7;
+      color:var(--muted);
+      margin-bottom:22px;
+    }
+    .auth-form{
+      display:grid;
+      gap:12px;
+      text-align:left;
+    }
+    .auth-label{
+      font-family:var(--mono);
+      font-size:10px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--wine);
+      margin-bottom:6px;
+      display:block;
+    }
+    .auth-input{
+      width:100%;
+      border:1px solid var(--border2);
+      border-radius:16px;
+      padding:16px 18px;
+      background:#fff;
+      color:var(--ink);
+      font-family:var(--sans);
+      font-size:15px;
+      outline:none;
+      transition:border-color .2s ease, box-shadow .2s ease;
+    }
+    .auth-input:focus{
+      border-color:var(--wine);
+      box-shadow:0 0 0 4px rgba(122,32,56,.08);
+    }
+    .auth-submit{
+      width:100%;
+      border:none;
+      border-radius:999px;
+      padding:15px 20px;
+      background:var(--wine);
+      color:#fff;
+      font-family:var(--sans);
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .auth-submit:hover{
+      background:var(--wine2);
+      transform:translateY(-1px);
+      box-shadow:0 12px 28px rgba(122,32,56,.18);
+    }
+    .auth-error{
+      min-height:18px;
+      font-size:12px;
+      color:var(--wine);
+      text-align:center;
+      margin-top:2px;
+    }
+    #siteContent[hidden]{display:none !important;}
+
+  </style>
+</head>
+<body class="auth-locked">
+
+<div id="authGate">
+  <div class="auth-card">
+    <div class="auth-mark">Parcelle<span class="dot"></span></div>
+    <h1>Acesso restrito</h1>
+    <p>Insira a senha para visualizar a proposta.</p>
+    <form class="auth-form" id="authForm">
+      <div>
+        <label class="auth-label" for="authPassword">Senha</label>
+        <input class="auth-input" id="authPassword" name="password" type="password" autocomplete="current-password" placeholder="Digite a senha" />
+      </div>
+      <button class="auth-submit" type="submit">Entrar</button>
+      <div class="auth-error" id="authError" aria-live="polite"></div>
+    </form>
+  </div>
+</div>
+<div id="siteContent" hidden>
+
+
+<nav class="nav" id="nav">
+  <div class="nav-in">
+    <div class="nav-logo"><span class="mark">Parcelle</span><span class="dot"></span></div>
+    <div class="nav-links">
+      <a href="#mercado">Mercado</a><a href="#cenario">Cenário</a><a href="#pilar">Reestruturação</a>
+      <a href="#servicos">Serviços</a><a href="#paineis">Painéis</a><a href="#automacao">Automação</a>
+      <a href="#fases">Fases</a><a href="#comercial">Comercial</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="w">
+    <div class="hero-inner">
+      <div class="rv">
+        <div class="tag">Gestão inteligente da categoria vinho</div>
+        <h1 style="margin-top:16px;">A categoria vinho merece <em>arquitetura</em>, não improviso.</h1>
+        <p class="hero-desc lead">A Parcelle integra inteligência comercial, curadoria especializada e tecnologia aplicada para transformar portfólio, carta, compra e reposição em um sistema coerente de decisão — para restaurantes, adegas, mercados, distribuidores e importadoras.</p>
+        <div class="hero-pills">
+          <span class="pill">Reestruturação de mix</span><span class="pill">Curadoria de carta</span>
+          <span class="pill">Compra por fornecedor</span><span class="pill">Menu engineering</span>
+          <span class="pill">Treinamento de equipe</span><span class="pill">Automação de pedidos</span>
+          <span class="pill">Eventos e harmonizações</span>
+        </div>
+      </div>
+      <div class="hero-aside rv rv-d2">
+        <div class="hero-block"><div class="hb-label">Problema</div><div class="hb-val">Dados e repertório existem, mas a gestão do portfólio ainda depende de decisão manual, sem estrutura analítica nem integração entre negócio e curadoria.</div></div>
+        <div class="hero-block"><div class="hb-label">Objetivo</div><div class="hb-val">Criar base técnica para decidir o que manter, corrigir, expandir, substituir — com critérios claros e capacidade real de implantação.</div></div>
+        <div class="hero-block"><div class="hb-label">Para quem</div><div class="hb-val">Restaurantes, wine bars, adegas, mercados, hotéis, distribuidores e importadoras que querem elevar a gestão da categoria vinho.</div></div>
+      </div>
+    </div>
+    <div class="thesis rv rv-d3">
+      <p><strong>Tese central:</strong> a categoria vinho no Brasil cresce em valor, não em volume. Quem não reestruturar portfólio, carta e lógica de compra agora vai operar abaixo do potencial em um mercado que premia sofisticação, curadoria e decisão baseada em dados.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item">Arquitetura de portfólio<span class="sep">·</span></span>
+    <span class="marquee-item">Curadoria especializada<span class="sep">·</span></span>
+    <span class="marquee-item">Menu engineering<span class="sep">·</span></span>
+    <span class="marquee-item">Inteligência de compra<span class="sep">·</span></span>
+    <span class="marquee-item">Treinamento de equipe<span class="sep">·</span></span>
+    <span class="marquee-item">Automação de pedidos<span class="sep">·</span></span>
+    <span class="marquee-item">Eventos e harmonizações<span class="sep">·</span></span>
+    <span class="marquee-item">Marca própria<span class="sep">·</span></span>
+    <span class="marquee-item">Arquitetura de portfólio<span class="sep">·</span></span>
+    <span class="marquee-item">Curadoria especializada<span class="sep">·</span></span>
+    <span class="marquee-item">Menu engineering<span class="sep">·</span></span>
+    <span class="marquee-item">Inteligência de compra<span class="sep">·</span></span>
+    <span class="marquee-item">Treinamento de equipe<span class="sep">·</span></span>
+    <span class="marquee-item">Automação de pedidos<span class="sep">·</span></span>
+    <span class="marquee-item">Eventos e harmonizações<span class="sep">·</span></span>
+    <span class="marquee-item">Marca própria<span class="sep">·</span></span>
+  </div>
+</div>
+
+<!-- ═══ MARKET ═══ -->
+<section class="market sec" id="mercado" style="padding:80px 0;">
+  <div class="w">
+    <div style="text-align:center;margin-bottom:40px;" class="rv">
+      <div class="tag" style="justify-content:center;">Contexto de mercado · 2025/2026</div>
+      <h2 style="margin:12px auto 0;max-width:700px;">O vinho no Brasil mudou de patamar. A gestão precisa acompanhar.</h2>
+    </div>
+    <div class="market-grid rv">
+      <div class="market-card"><div class="mc-num">21,1<span class="mc-unit">bi</span></div><div class="mc-label">Faturamento do mercado brasileiro em 2025</div><div class="mc-src">Ideal.BI</div></div>
+      <div class="market-card"><div class="mc-num">+9<span class="mc-unit">%</span></div><div class="mc-label">Crescimento anual por premiumização</div><div class="mc-src">Ideal.BI</div></div>
+      <div class="market-card"><div class="mc-num">30<span class="mc-unit">%</span></div><div class="mc-label">Fatia premium no faturamento de vinhos finos</div><div class="mc-src">Ideal.BI</div></div>
+      <div class="market-card"><div class="mc-num">+28<span class="mc-unit">%</span></div><div class="mc-label">Crescimento de brancos no 1ºT 2025</div><div class="mc-src">Ideal Consulting</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CENÁRIO ═══ -->
+<section class="sec" id="cenario">
+  <div class="w">
+    <div class="ctx-grid">
+      <div class="ctx-main rv">
+        <div class="tag">01 · Leitura do cenário</div>
+        <h2 style="margin-top:12px;font-size:34px;">O problema não é falta de informação. É falta de arquitetura.</h2>
+        <p style="margin-top:18px;">Em operações com portfólio relevante, existem relatórios e experiência — mas a decisão de compra, mix e reposição opera por acúmulo de hábitos e leitura fragmentada. Resultado: sobreposições, faixas mal construídas, lacunas e capital parado.</p>
+        <div class="ctx-callout"><p><strong>Premissa Parcelle:</strong> implantar ferramenta sem reestruturar o portfólio resolve pouco. Primeiro se entende o papel de cada categoria, faixa e fornecedor. Depois isso vira critério, rotina e execução.</p></div>
+      </div>
+      <div class="ctx-side">
+        <div class="ctx-card rv rv-d1"><strong>Lacunas invisíveis</strong><span>Faixas sem cobertura que só aparecem quando o portfólio é lido como arquitetura.</span></div>
+        <div class="ctx-card rv rv-d2"><strong>Redundâncias que drenam margem</strong><span>Rótulos competindo entre si no mesmo espaço comercial.</span></div>
+        <div class="ctx-card rv rv-d3"><strong>Compra reativa</strong><span>Reposição por hábito ou urgência, não por leitura estruturada.</span></div>
+        <div class="ctx-card rv rv-d4"><strong>Equipe sem repertório</strong><span>Vendedores e garçons sem conhecimento técnico para converter venda.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PILAR ═══ -->
+<section class="sec" style="padding-top:0;" id="pilar">
+  <div class="w">
+    <div class="pillar rv">
+      <div style="position:relative;z-index:1;">
+        <div class="tag">02 · Pilar central</div>
+        <h2 style="margin-top:12px;max-width:880px;color:#fff;">Reestruturação estratégica do portfólio</h2>
+        <p class="lead" style="margin-top:14px;max-width:780px;">O portfólio não é uma lista de SKUs. É uma arquitetura comercial que precisa de coerência, amplitude calibrada e papel definido para cada grupo de rótulos.</p>
+        <div class="p-grid">
+          <div class="p-card rv rv-d1"><div class="p-icon">◆</div><h4>Racionalização do mix</h4><p>Redundâncias, sobreposições e oportunidades de simplificação sem perda comercial.</p></div>
+          <div class="p-card rv rv-d2"><div class="p-icon">◆</div><h4>Expansão orientada</h4><p>Lacunas reais — categorias, faixas ou estilos subrepresentados com espaço para crescimento.</p></div>
+          <div class="p-card rv rv-d3"><div class="p-icon">◆</div><h4>Arquitetura de categorias</h4><p>Tintos, brancos, espumantes, rosés, sobremesa, orgânicos — com profundidade por grupo.</p></div>
+          <div class="p-card rv rv-d1"><div class="p-icon">◆</div><h4>Papel dos rótulos</h4><p>Giro, margem, imagem, entrada, premium, proteção, teste ou descontinuação.</p></div>
+          <div class="p-card rv rv-d2"><div class="p-icon">◆</div><h4>Escada de preço</h4><p>Progressão coerente dentro de cada categoria, sem saltos nem sobreposições.</p></div>
+          <div class="p-card rv rv-d3"><div class="p-icon">◆</div><h4>Proteção de margem</h4><p>Substituição, reposicionamento e ajuste que preservem rentabilidade.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SERVIÇOS EXPANDIDOS ═══ -->
+<section class="sec" id="servicos">
+  <div class="w">
+    <div class="sh rv">
+      <div class="tag tag-gold">03 · Ecossistema de serviços Parcelle</div>
+      <h2>Tudo que a categoria vinho precisa para funcionar como sistema — não como improviso</h2>
+      <p>Cada operação ativa o que faz sentido. Não existe pacote fechado. Existe diagnóstico, prioridade e execução modular.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc rv rv-d1"><div class="svc-num">01</div><div class="kicker">Core</div><h4>Arquitetura de portfólio</h4><p>Diagnóstico, reestruturação, mapa de mix, matriz de função dos rótulos, escada de preço e política de entrada/saída.</p></div>
+      <div class="svc rv rv-d2"><div class="svc-num">02</div><div class="kicker">Core</div><h4>Curadoria e carta</h4><p>Construção técnica da seleção, arquitetura de carta, oferta em taça, rótulos-âncora e narrativa comercial.</p></div>
+      <div class="svc rv rv-d3"><div class="svc-num">03</div><div class="kicker">Core</div><h4>Inteligência de compra</h4><p>Lógica de reposição, mapa por fornecedor, sazonalidade, previsão de demanda e automação de pedidos.</p></div>
+      <div class="svc rv rv-d1"><div class="svc-num">04</div><div class="kicker kicker-gold">Expansão</div><h4>Menu engineering vínico</h4><p>Análise de rentabilidade por posição na carta, redesenho de layout para maximizar ticket médio e venda sugerida.</p></div>
+      <div class="svc rv rv-d2"><div class="svc-num">05</div><div class="kicker kicker-gold">Expansão</div><h4>Treinamento de equipe</h4><p>Capacitação de garçons, vendedores e compradores em repertório técnico, argumentação de venda e leitura da carta.</p></div>
+      <div class="svc rv rv-d3"><div class="svc-num">06</div><div class="kicker kicker-gold">Expansão</div><h4>Eventos e harmonizações</h4><p>Curadoria de jantares, degustações, lançamentos e experiências sensoriais — do conceito à execução.</p></div>
+      <div class="svc rv rv-d1"><div class="svc-num">07</div><div class="kicker kicker-sage">Premium</div><h4>Wine program para hotéis</h4><p>Desenho completo do programa de vinhos para hotelaria: minibar, room service, restaurante, bar, eventos e frigobar executivo.</p></div>
+      <div class="svc rv rv-d2"><div class="svc-num">08</div><div class="kicker kicker-sage">Premium</div><h4>Desenvolvimento de marca própria</h4><p>Apoio na criação de rótulos exclusivos para restaurantes, redes e adegas — da concepção ao rótulo final.</p></div>
+      <div class="svc rv rv-d3"><div class="svc-num">09</div><div class="kicker kicker-sage">Premium</div><h4>Estratégia digital da carta</h4><p>Conteúdo, fotografia, storytelling e presença digital da oferta de vinhos para atrair e converter o público certo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MOCKUPS ═══ -->
+<section class="sec" id="paineis">
+  <div class="w">
+    <div class="sh rv">
+      <div class="tag">04 · Na prática</div>
+      <h2>Exemplos de painéis e leituras que nascem do projeto</h2>
+      <p>Representações conceituais — não promessa de interface final, mas demonstração do tipo de inteligência produzida.</p>
+    </div>
+    <div class="mock-grid rv">
+      <div class="mock">
+        <div class="mock-head"><div><div class="mock-title">Decisão por rótulo</div><div class="mock-sub">Painel operacional · ilustrativo</div></div><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="mock-body">
+          <div class="kpi-row">
+            <div class="kpi"><span class="k-l">Estoque</span><span class="k-v">18</span><span class="k-s">garrafas</span></div>
+            <div class="kpi"><span class="k-l">Venda 30d</span><span class="k-v">14</span><span class="k-s">+22% vs mês ant.</span></div>
+            <div class="kpi"><span class="k-l">Cobertura</span><span class="k-v">39</span><span class="k-s">dias</span></div>
+            <div class="kpi"><span class="k-l">Sugestão</span><span class="k-v">24</span><span class="k-s">garrafas</span></div>
+          </div>
+          <div class="m-cols">
+            <div class="m-box"><h4>Análise</h4>
+              <div class="m-row"><div><div class="m-row-t">Espumante Brut Rosé</div><div class="m-row-s">Premium · Fornec. B</div></div><span class="flag attn">sazonal</span></div>
+              <div class="m-row"><div><div class="m-row-t">Histórico</div><div class="m-row-s">Aceleração nov–dez</div></div><span class="flag ok">giro ok</span></div>
+              <div class="m-row"><div><div class="m-row-t">Sistema</div><div class="m-row-s">Cobertura curta</div></div><span class="flag warn">ruptura</span></div>
+            </div>
+            <div class="m-box"><h4>Venda · 6 meses</h4>
+              <div class="bars"><div class="bar g" style="height:34px"></div><div class="bar g" style="height:40px"></div><div class="bar s" style="height:48px"></div><div class="bar s" style="height:60px"></div><div class="bar w" style="height:80px"></div><div class="bar w" style="height:90px"></div></div>
+              <div class="bar-lbl"><span>Jul</span><span>Ago</span><span>Set</span><span>Out</span><span>Nov</span><span>Dez</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mock">
+        <div class="mock-head"><div><div class="mock-title">Matriz de rótulos</div><div class="mock-sub">Classificação estratégica</div></div><div class="dots"><span></span><span></span><span></span></div></div>
+        <div class="mock-body" style="padding:0;">
+          <table><thead><tr><th>Rótulo</th><th>Categoria</th><th>Papel</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Malbec Reserva X</strong></td><td>Tinto · Média</td><td>Giro + margem</td><td><span class="flag ok">manter</span></td></tr>
+            <tr><td><strong>Sauv. Blanc Y</strong></td><td>Branco · Entrada</td><td>Volume</td><td><span class="flag ok">manter</span></td></tr>
+            <tr><td><strong>Cab. Sauv. Z</strong></td><td>Tinto · Média</td><td>Sobreposto</td><td><span class="flag attn">avaliar</span></td></tr>
+            <tr><td><strong>Espum. Brut W</strong></td><td>Espum. · Premium</td><td>Imagem</td><td><span class="flag ok">reforçar</span></td></tr>
+            <tr><td><strong>Rosé V</strong></td><td>Rosé · Média</td><td>Baixo giro</td><td><span class="flag warn">cortar</span></td></tr>
+            <tr><td><strong>Pinot Noir U</strong></td><td>Tinto · Premium</td><td>Lacuna</td><td><span class="flag attn">incluir</span></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+    <!-- Sazonalidade -->
+    <div class="season-grid rv" style="margin-top:20px;">
+      <div class="season-card"><div class="kicker kicker-gold">Calendário</div><h4 style="margin-top:12px;">Leitura antecipada</h4><div style="margin-top:14px;">
+        <div class="s-item"><strong>Dia das Mães</strong><span>Espumantes, rosés, brancos aromáticos. Janela: mar–abr.</span></div>
+        <div class="s-item"><strong>Inverno</strong><span>Tintos estruturados, faixas médias e premium.</span></div>
+        <div class="s-item"><strong>Fim de ano</strong><span>Espumantes e itens de celebração. Revisão antes de outubro.</span></div>
+      </div></div>
+      <div class="season-card"><h4>Alertas executivos</h4><div style="margin-top:14px;">
+        <div class="event"><div class="date">Mar–Abr</div><div><strong>Dia das Mães</strong><p>Rever espumantes, rosés e brancos de apelo visual.</p></div></div>
+        <div class="event"><div class="date">Mai–Jun</div><div><strong>Período frio</strong><p>Reforçar tintos gastronômicos.</p></div></div>
+        <div class="event"><div class="date">Out–Nov</div><div><strong>Fim de ano</strong><p>Antecipar compra de espumantes com lead time.</p></div></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ AUTOMAÇÃO ═══ -->
+<section class="sec" id="automacao" style="background:var(--paper);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="w">
+    <div class="sh rv">
+      <div class="tag">05 · Automação de pedidos</div>
+      <h2>Do racional ao pedido pronto — organizado e enviável</h2>
+    </div>
+    <div class="auto-flow rv">
+      <div>
+        <div class="order-mock">
+          <div class="order-head"><div><div class="mock-title">Pedido · Fornecedor B</div><div class="mock-sub">19 mar 2026</div></div><div class="dots"><span></span><span></span><span></span></div></div>
+          <div class="order-body">
+            <div class="oi"><div class="oi-name">Espumante Brut Rosé<small>Cx. 6 · Cód. 4821</small></div><div class="oi-qty">4 cx</div><div class="oi-val">R$ 1.440</div><span class="flag warn">ruptura</span></div>
+            <div class="oi"><div class="oi-name">Sauvignon Blanc Y<small>Cx. 6 · Cód. 3105</small></div><div class="oi-qty">3 cx</div><div class="oi-val">R$ 810</div><span class="flag attn">cobertura</span></div>
+            <div class="oi"><div class="oi-name">Malbec Reserva X<small>Cx. 12 · Cód. 2290</small></div><div class="oi-qty">2 cx</div><div class="oi-val">R$ 1.080</div><span class="flag ok">reposição</span></div>
+            <div class="order-total"><strong>11 cx · R$ 4.120</strong><span>Mín. ✓ · Frete grátis ✓</span></div>
+            <div class="btn-row"><button class="btn primary">✓ Enviar via WhatsApp</button><button class="btn sec">✎ Ajustar</button><button class="btn sec">↓ PDF</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="auto-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg><span class="arr-txt">Envio</span></div>
+      <div>
+        <div class="wa-mock">
+          <div class="wa-head"><div class="wa-avatar">FB</div><div><div class="wa-name">Fornecedor B</div><div class="wa-status">online</div></div></div>
+          <div class="wa-body">
+            <div class="wa-bubble sent"><strong>Pedido — Unidade</strong><span class="wa-mono">📋 PEDIDO #PAR-2026-0319
+Fornecedor: Importadora B
+━━━━━━━━━━━━━━━━━
+1. Espumante Brut Rosé
+   4 cx (24 un.) — R$ 1.440
+2. Sauvignon Blanc Y
+   3 cx (18 un.) — R$ 810
+3. Malbec Reserva X
+   2 cx (24 un.) — R$ 1.080
+━━━━━━━━━━━━━━━━━
+TOTAL: 11 cx · R$ 4.120
+Frete grátis · Entrega: 26/03</span><span class="wa-time">14:32 ✓✓</span></div>
+            <div class="wa-bubble recv">Pedido recebido! Confirmo em instantes. 👍<span class="wa-time">14:35</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FASES ═══ -->
+<section class="sec" id="fases">
+  <div class="w">
+    <div class="sh rv">
+      <div class="tag">06 · Estrutura do projeto</div>
+      <h2>Três fases. Cada uma com entrega própria e decisão de continuidade.</h2>
+    </div>
+    <div class="phase-grid">
+      <div class="phase feat rv rv-d1"><div class="phase-num">01</div><div class="kicker">Diagnóstico e curadoria</div><h3>Leitura crítica e nova lógica da seleção</h3><p>Mapeamento de dados, análise de mix, categorias e critérios para reestruturação.</p><ul class="cl"><li>Portfólio e arquitetura de categorias</li><li>Redundâncias, lacunas, progressão de preço</li><li>Carta, oferta em taça, sazonalidade</li><li>Estoque, cobertura, lógica por fornecedor</li><li>Relatório executivo com recomendação</li></ul></div>
+      <div class="phase rv rv-d2"><div class="phase-num">02</div><div class="kicker">Arquitetura da solução</div><h3>Modelo decisório e materiais de apoio</h3><p>Indicadores, regras, dashboards, carta e fluxo de rotina.</p><ul class="cl"><li>Critérios por categoria, giro e fornecedor</li><li>Arquitetura de carta e progressão</li><li>Desenho de painéis decisórios</li><li>Calendário e fluxo de pedido</li></ul></div>
+      <div class="phase rv rv-d3"><div class="phase-num">03</div><div class="kicker">Implantação</div><h3>Construção, teste e incorporação</h3><p>Solução em uso com treinamento e ajuste fino.</p><ul class="cl"><li>Construção na tecnologia adequada</li><li>Parametrização e treinamento</li><li>Automação de pedidos</li><li>Governança para sustentação</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ IMPACTO ═══ -->
+<section class="sec">
+  <div class="w">
+    <div style="text-align:center;margin-bottom:48px;" class="rv">
+      <div class="tag tag-sage" style="justify-content:center;">07 · Impacto</div>
+      <h2 style="margin:12px auto 0;">O que muda com a Parcelle</h2>
+    </div>
+    <div class="res-grid">
+      <div class="res rv rv-d1"><strong>Portfólio coerente</strong><p>Papéis, faixas e profundidade definidos.</p></div>
+      <div class="res rv rv-d2"><strong>Curadoria com assinatura</strong><p>Carta alinhada, venda mais fácil.</p></div>
+      <div class="res rv rv-d3"><strong>Decisão com critério</strong><p>Regras objetivas para compra e reposição.</p></div>
+      <div class="res rv rv-d4"><strong>Equipe preparada</strong><p>Repertório técnico que converte em venda.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMERCIAL ═══ -->
+<section class="sec" id="comercial">
+  <div class="w">
+    <div class="comm-grid">
+      <div class="price-block rv">
+        <div class="tag">Modelo comercial</div>
+        <h2 style="margin-top:12px;color:#fff;">Entrada clara, evolução em camadas</h2>
+        <div class="price-big">01 → 02 → 03</div>
+        <p>Porta de entrada: <strong style="color:#fff">Fase 1</strong> — diagnóstico + curadoria + reestruturação. Só depois faz sentido definir ferramenta e implantação.</p>
+      </div>
+      <div class="rv rv-d2">
+        <div class="tbl-shell">
+          <table><thead><tr><th>Fase</th><th>Entrega</th><th>Contratação</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Fase 1</strong><br><span style="font-size:11px;color:var(--muted);">Diagnóstico</span></td><td>Relatório executivo, mapa de gargalos, reestruturação e racional.</td><td>Inicial e independente.</td></tr>
+            <tr><td><strong>Fase 2</strong><br><span style="font-size:11px;color:var(--muted);">Arquitetura</span></td><td>Blueprint decisório, carta, indicadores e lógica de fornecedor.</td><td>Após validação.</td></tr>
+            <tr class="hl"><td><strong>Fase 3</strong><br><span style="font-size:11px;color:var(--muted);">Implantação</span></td><td>Construção, treinamento, automação e materiais.</td><td>Pelo blueprint.</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="sec">
+  <div class="w">
+    <div class="sh rv"><div class="tag">Objeções relevantes</div><h2 style="margin-top:12px;">Pontos que a proposta já responde</h2></div>
+    <div class="faq-list">
+      <div class="faq rv"><h4>"Já temos relatórios."</h4><p>Relatório não é modelo decisório. A Parcelle converte informação em regra, curadoria e rotina.</p></div>
+      <div class="faq rv"><h4>"Isso é consultoria ou software?"</h4><p>Consultoria em fases. Começa com diagnóstico; evolui para ferramenta quando fizer sentido.</p></div>
+      <div class="faq rv"><h4>"Favorece algum fornecedor?"</h4><p>Não. A lógica é construída para a operação, não para o importador.</p></div>
+      <div class="faq rv"><h4>"Não seria melhor implantar direto?"</h4><p>Implantar sem diagnóstico é construir sobre processo mal definido.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<section class="footer">
+  <div class="w">
+    <div class="divider" style="margin-bottom:56px;"></div>
+    <div class="footer-grid">
+      <div class="footer-main rv">
+        <div class="tag">Quem é a Parcelle</div>
+        <h3 style="margin-top:12px;">Inteligência comercial + curadoria especializada + tecnologia aplicada</h3>
+        <p style="margin-top:14px;">A Parcelle nasce da combinação entre visão de negócio, repertório técnico em vinho e capacidade real de implantação. Dois sócios complementares que atuam tanto na eficiência da categoria quanto na qualidade da seleção.</p>
+        <div class="profile-grid">
+          <div class="profile"><span class="pb gold">João Gabriel Mosimann</span><div class="pn">Inteligência comercial, IA e implantação</div><div class="pd">Mais de uma década no vinho B2B. Modelagem de decisão, compra, margem e construção de ferramentas.</div></div>
+          <div class="profile"><span class="pb wine">Eduardo Araújo</span><div class="pn">Curadoria, carta e posicionamento</div><div class="pd">Sommelier do Ano 2019. WSET e CMS. Seleção, carta, repertório e posicionamento da oferta.</div></div>
+        </div>
+        <div class="connector"><p><strong>Complementaridade:</strong> João estrutura o sistema — dados, arquitetura, automação. Eduardo eleva a curadoria — seleção, carta, narrativa e legitimidade técnica.</p></div>
+      </div>
+      <div class="footer-cta rv rv-d2">
+        <div class="tag">Próximo passo</div>
+        <h3 style="margin-top:12px;">Conversa de aderência</h3>
+        <p style="margin-top:14px;">Validar contexto, entender bases disponíveis e definir o recorte da Fase 1. Sem compromisso de contratação.</p>
+        <div style="margin-top:28px;"><a class="cta-btn" href="https://wa.me/5547999298475" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.553 4.12 1.52 5.857L0 24l6.335-1.652A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.82c-1.98 0-3.81-.592-5.35-1.607l-.384-.228-3.764.982.998-3.648-.254-.4A9.79 9.79 0 012.18 12c0-5.422 4.398-9.82 9.82-9.82 5.422 0 9.82 4.398 9.82 9.82 0 5.422-4.398 9.82-9.82 9.82z"/></svg>Vamos conversar</a></div>
+        <p class="small" style="margin-top:20px;">Proposta adaptável por tipo de operação e maturidade dos dados.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+const SITE_PASSWORD = "Parcelle";
+const STORAGE_KEY = "parcelle_access_ok";
+const authGate = document.getElementById("authGate");
+const siteContent = document.getElementById("siteContent");
+const authForm = document.getElementById("authForm");
+const authPassword = document.getElementById("authPassword");
+const authError = document.getElementById("authError");
+
+function unlockSite(){
+  document.body.classList.remove("auth-locked");
+  authGate.hidden = true;
+  siteContent.hidden = false;
+}
+
+if (localStorage.getItem(STORAGE_KEY) === "ok") {
+  unlockSite();
+} else {
+  authPassword?.focus();
+}
+
+authForm?.addEventListener("submit", function(e){
+  e.preventDefault();
+  if ((authPassword.value || "").trim() === SITE_PASSWORD) {
+    localStorage.setItem(STORAGE_KEY, "ok");
+    authError.textContent = "";
+    unlockSite();
+  } else {
+    authError.textContent = "Senha incorreta.";
+    authPassword.select();
+  }
+});
+
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis');});},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+const nav=document.getElementById('nav');
+const sects=document.querySelectorAll('section[id]');
+const links=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',window.scrollY>60);
+  let c='';sects.forEach(s=>{if(window.scrollY>=s.offsetTop-140)c=s.id;});
+  links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));
+},{passive:true});
+</script>
+</body>
+</html>
