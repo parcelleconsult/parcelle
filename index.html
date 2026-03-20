@@ -305,6 +305,13 @@
     .event strong{font-size:13px;display:block;margin-bottom:3px;color:var(--ink);}
     .event p{font-size:12.5px;line-height:1.5;color:var(--muted);}
 
+    /* MATRIX MOBILE CARDS */
+    .mx-card{padding:14px;border-radius:12px;background:var(--bg);border:1px solid var(--border);margin-bottom:8px;}
+    .mx-card:last-child{margin-bottom:0;}
+    .mx-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+    .mx-top strong{font-size:14px;color:var(--ink);line-height:1.35;}
+    .mx-meta{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;}
+
     /* RESPONSIVE */
     @media(max-width:1100px){
       .hero-inner,.ctx-grid,.comm-grid,.footer-grid,.auto-flow{grid-template-columns:1fr;}
@@ -318,6 +325,8 @@
       .market-grid{grid-template-columns:1fr;}
       .kpi-row{grid-template-columns:1fr 1fr;}
       .nav-links{display:none;}.pillar{padding:28px;}
+      .matrix-desktop{display:none !important;}
+      .matrix-mobile{display:block !important;}
       .hero{min-height:auto;padding-top:36px;}
       .hero-inner{gap:32px;}
       .hero-desc{margin-top:20px;}
@@ -745,7 +754,8 @@
       <div class="mock">
         <div class="mock-head"><div><div class="mock-title">Matriz de função dos rótulos</div><div class="mock-sub">Classificação estratégica · amostra do portfólio</div></div><div class="dots"><span></span><span></span><span></span></div></div>
         <div class="mock-body" style="padding:0;">
-          <table><thead><tr><th>Rótulo</th><th>Faixa</th><th>Papel</th><th>Ação</th></tr></thead>
+          <!-- Desktop table -->
+          <table class="matrix-desktop"><thead><tr><th>Rótulo</th><th>Faixa</th><th>Papel</th><th>Ação</th></tr></thead>
           <tbody>
             <tr><td><strong>Malbec Reserva Altos del Plata</strong></td><td>Tinto · R$ 80–120</td><td>Giro + margem</td><td><span class="flag ok">manter</span></td></tr>
             <tr><td><strong>Sauvignon Blanc Valle Central</strong></td><td>Branco · R$ 45–65</td><td>Volume · entrada</td><td><span class="flag ok">manter</span></td></tr>
@@ -755,6 +765,16 @@
             <tr><td><strong>Chardonnay Gran Reserva Costa</strong></td><td>Branco · R$ 65–90</td><td>Lacuna — branco premium</td><td><span class="flag attn">incluir</span></td></tr>
             <tr><td><strong>Pinot Noir Selection Patagonia</strong></td><td>Tinto · R$ 110–150</td><td>Lacuna — tinto leve premium</td><td><span class="flag attn">incluir</span></td></tr>
           </tbody></table>
+          <!-- Mobile cards -->
+          <div class="matrix-mobile" style="padding:16px;display:none;">
+            <div class="mx-card"><div class="mx-top"><strong>Malbec Reserva Altos del Plata</strong><span class="flag ok">manter</span></div><div class="mx-meta">Tinto · R$ 80–120 · Giro + margem</div></div>
+            <div class="mx-card"><div class="mx-top"><strong>Sauvignon Blanc Valle Central</strong><span class="flag ok">manter</span></div><div class="mx-meta">Branco · R$ 45–65 · Volume · entrada</div></div>
+            <div class="mx-card"><div class="mx-top"><strong>Cabernet Sauvignon Los Andes</strong><span class="flag warn">substituir</span></div><div class="mx-meta">Tinto · R$ 70–100 · Sobreposto c/ Malbec</div></div>
+            <div class="mx-card"><div class="mx-top"><strong>Espumante Brut Rosé Cave Colonial</strong><span class="flag ok">reforçar</span></div><div class="mx-meta">Espum. · R$ 90–130 · Imagem + sazonal</div></div>
+            <div class="mx-card"><div class="mx-top"><strong>Rosé Cuvée Classique</strong><span class="flag warn">descontinuar</span></div><div class="mx-meta">Rosé · R$ 40–55 · Giro lento · 0,3/dia</div></div>
+            <div class="mx-card"><div class="mx-top"><strong>Chardonnay Gran Reserva Costa</strong><span class="flag attn">incluir</span></div><div class="mx-meta">Branco · R$ 65–90 · Lacuna — branco premium</div></div>
+            <div class="mx-card"><div class="mx-top"><strong>Pinot Noir Selection Patagonia</strong><span class="flag attn">incluir</span></div><div class="mx-meta">Tinto · R$ 110–150 · Lacuna — tinto leve premium</div></div>
+          </div>
         </div>
       </div>
 
